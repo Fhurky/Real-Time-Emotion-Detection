@@ -84,4 +84,4 @@ python main.py
 
 ## ✍️ Geliştirici
 
-Furkan Koçal – [LinkedIn](https://www.linkedin.com/in/furkankocal)
+Furkan Koçal – [LinkedIn](https://www.linkedin.com/in/fhurkhan/)
