@@ -1,3 +1,4 @@
+
 # 🎭 Real-Time Multimodal Emotion Detection
 
 Bu proje, metin, ses ve görüntü verileri üzerinden gerçek zamanlı olarak duygu analizi yapabilen çok modlu (multimodal) bir yapay zeka sistemidir. Python tabanlı bu sistemde hem makine öğrenmesi hem de derin öğrenme yöntemleri kullanılmıştır.
@@ -19,19 +20,21 @@ Bu proje, metin, ses ve görüntü verileri üzerinden gerçek zamanlı olarak d
 ## 📁 Proje Yapısı
 
 ```
-├── main.py                   # Uygulamanın ana çalışma dosyası
-├── audioRecorder.py          # Mikrofon üzerinden ses kaydı
-├── audioToText.py            # Ses verisini metne çevirme
-├── audioPredictor.py         # Sesten duygu tespiti
-├── imagePrediction.py        # Görüntüden duygu tespiti
-├── modelPredictor.py         # Yüklenen modellerle tahmin işlemleri
-├── textPredictorTr.py        # Türkçe metin analizi
-├── textPredictorEn.py        # İngilizce metin analizi
-├── Configs/                  # Ayar dosyaları
-├── Models/                   # Kayıtlı modeller (.pkl, .keras vs.)
-├── trimmed_audio/            # Kırpılmış ses kayıtları
-├── record/, test/            # Ses testi/kayıt örnekleri
-└── README.md                 # Bu dosya
+├── main.py                       # Uygulamanın ana çalışma dosyası
+├── audioRecorder.py              # Mikrofon üzerinden ses kaydı
+├── audioToText.py                # Ses verisini metne çevirme
+├── audioPredictor.py             # Sesten duygu tespiti
+├── imagePrediction.py            # Görüntüden duygu tespiti
+├── modelPredictor.py             # Yüklenen modellerle tahmin işlemleri
+├── textPredictorTr.py            # Türkçe metin analizi
+├── textPredictorEn.py            # İngilizce metin analizi
+├── Configs/                      # Ayar dosyaları
+├── Models/                       # Kayıtlı modeller (.pkl, .keras vs.)
+├── trimmed_audio/                # Kırpılmış ses kayıtları
+├── record/, test/                # Ses testi/kayıt örnekleri
+├── turkish_emotion_analysis.pt   # Türkçe veri kümesiyle eğitilmiş model
+├── Image_model.keras             # Görüntü CNN modeli
+└── README.md                     # Bu dosya
 ```
 
 ## 🧠 Kullanılan Modeller
