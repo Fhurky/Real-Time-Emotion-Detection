@@ -1,0 +1,13 @@
+{
+    "weights": [0.854, 0.800, 0.893, 0.746, 0.661, 0.843, 0.630, 0.820],
+    "model_path": "C:\\Users\\PC_4424\\Desktop\\main\\turkish_emotion_analysis.pt",
+    "image_model_path": "./Image_model.keras",
+    "voice_model_path": "./Models/",
+    "json_path": "./",
+    "prediction_temp_wav": "prediction_temp.wav",
+    "full_temp_wav": "full_temp.wav",
+    "language": "tr-TR",
+    "image_weight": 0.3,
+    "voice_weight": 0.5,
+    "text_weight": 0.4
+}
