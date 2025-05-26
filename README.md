@@ -79,8 +79,10 @@ python main.py
 
 ## 📌 Notlar
 
-- Türkçe ses analizi için özel eğitilmiş bir PyTorch modeli (`turkish_emotion_analysis.pt`) kullanılmıştır.
+- Türkçe ses analizi için özel eğitilmiş bir PyTorch modeli (`turkish_emotion_analysis.pt`) kullanılmıştır. Link:(https://drive.google.com/file/d/18K8lBk3JzQRr8TwiB7XzlHOoZlPSrxvU/view?usp=sharing)
+- Görüntü CNN modeli için indirme link: (https://drive.google.com/file/d/1gSQU-dn3fY9AmAckyeYZQWyXZdkkWknK/view?usp=sharing)
 - Her bir modal için ayrı modüler dosyalar yazılmıştır, bu sayede sadece ses, sadece metin veya sadece görüntü bazlı sistemler bağımsız olarak da çalıştırılabilir.
+  
 
 ## ✍️ Geliştirici
 
