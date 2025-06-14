@@ -1,0 +1,12 @@
+models/image/IMAGE_MODEL_V1.keras
+models/text/turkish_emotion_analysis.pt
+models/voice/aboost_model.pkl
+models/voice/gnb_model.pkl
+models/voice/knn_model.pkl
+models/voice/knn_model_deneme.pkl
+models/voice/lr_model.pkl
+models/voice/mlp_model(pipeline).pkl
+models/voice/nn_model.keras
+models/voice/nn_scaler.pkl
+models/voice/rf_model.pkl
+models/voice/svm_model.pkl
