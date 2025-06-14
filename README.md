@@ -5,7 +5,7 @@ Bu proje, **metin**, **görüntü** ve **ses** girdilerinden Türkçe duygu anal
 ---
 
 ## 📂 Klasör Yapısı
-
+- Modelleri indirdikten sonra ilgili yerlere kopyalayınız
 ```
 ./Emotion_Detection/
 ├── config_files
