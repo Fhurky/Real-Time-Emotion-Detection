@@ -9,7 +9,7 @@ logging.set_verbosity_error()
 warnings.filterwarnings("ignore")
 
 class EmotionPredictor:
-    def __init__(self, model_path="/home/fhurkhan/Masaüstü/main/TEXT/turkish_emotion_analysis.pt"):
+    def __init__(self, model_path=None):
         # Initialize tokenizer and model
         self.tokenizer = AutoTokenizer.from_pretrained("maymuni/bert-base-turkish-cased-emotion-analysis")
         self.bert = AutoModel.from_pretrained("maymuni/bert-base-turkish-cased-emotion-analysis", return_dict=False)
