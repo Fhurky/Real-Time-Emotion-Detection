@@ -5,7 +5,7 @@ Bu proje, **metin**, **görüntü** ve **ses** girdilerinden Türkçe duygu anal
 ---
 
 ## 📂 Klasör Yapısı
-- Modelleri indirdikten sonra ilgili yerlere kopyalayınız (Gereksinimler kısmında indirme linki bulunmaktadır)
+
 ```
 ./Emotion_Detection/
 ├── config_files
@@ -110,7 +110,6 @@ Bu proje, **metin**, **görüntü** ve **ses** girdilerinden Türkçe duygu anal
 - Transformers
 - OpenCV
 - torchaudio / librosa
-- models: (https://drive.google.com/file/d/1GwNP7SDSw-0-Rk72wpB1-5TqSWsPbJXt/view?usp=sharing)
 
 Detaylı gereksinim listesi için `requirements.txt` dosyasına bakınız.
 
