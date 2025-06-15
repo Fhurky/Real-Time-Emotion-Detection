@@ -4,7 +4,7 @@ from deep_translator import GoogleTranslator
 
 class EmotionPredictorEN:
     def __init__(self):
-        self.classifier = pipeline("text-classification", model='bhadresh-savani/bert-base-uncased-emotion', return_all_scores=True)
+        self.classifier = pipeline("text-classification", model='bhadresh-savani/bert-base-uncased-emotion', return_all_scores=True, device=-1)
 
     def translate_to_english(self, text):
         return GoogleTranslator(source='tr', target='en').translate(text)
