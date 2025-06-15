@@ -6,6 +6,7 @@ import time
 from PIL import Image, ImageTk
 from datetime import datetime
 import os
+import json
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from needed_classes.speech_to_text import EmotionRecognizer
@@ -14,14 +15,22 @@ from needed_classes.predictor import predict_emotion_from_audio
 from needed_classes.recorder import AudioRecorder
 
 class EmotionAnalysisGUI:
-    def __init__(self):
+    def __init__(self, keras_model=None):
+        if keras_model is not None:
+            self.keras_model = keras_model
+        else:
+            config_path = os.path.join("config_files", "config.json")
+            with open(config_path, "r", encoding="utf-8") as file:
+                config = json.load(file)
+            self.keras_model = config.get("keras")
+
         # CustomTkinter tema ayarları
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
         
         # Ana pencere
         self.root = ctk.CTk()
-        self.root.title("🎭 Gerçek Zamanlı Duygu Analizi v2.0")
+        self.root.title("🎭 REAL TIME EMOTION DETECTOR V2.0")
         self.root.geometry("1800x1000")
         self.root.resizable(True, True)
         
@@ -119,7 +128,7 @@ class EmotionAnalysisGUI:
         # Kamera başlığı - Emoji ve modern font
         self.camera_title = ctk.CTkLabel(
             self.camera_header, 
-            text="📹 KAMERA GÖRÜNTÜSÜ", 
+            text="📹 CAMERA", 
             font=ctk.CTkFont(size=20, weight="bold"),
             text_color=("#2c5282", "#ffffff")
         )
@@ -133,7 +142,7 @@ class EmotionAnalysisGUI:
         
         self.camera_label = ctk.CTkLabel(
             self.camera_frame, 
-            text="🎥 Kamera Bekleniyor...", 
+            text="🎥 Waiting for camera...", 
             font=ctk.CTkFont(size=16),
             text_color=("#718096", "#a0aec0")
         )
@@ -155,7 +164,7 @@ class EmotionAnalysisGUI:
         
         self.control_title = ctk.CTkLabel(
             self.control_header,
-            text="⚙️ KONTROL PANELİ",
+            text="⚙️ CONTROL PANEL",
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=("#2d7d32", "#ffffff")
         )
@@ -168,7 +177,7 @@ class EmotionAnalysisGUI:
         
         self.start_button = ctk.CTkButton(
             self.button_frame,
-            text="🚀 BAŞLAT",
+            text="🚀 START",
             command=self.start_analysis,
             font=ctk.CTkFont(size=16, weight="bold"),
             height=50,
@@ -180,7 +189,7 @@ class EmotionAnalysisGUI:
         
         self.stop_button = ctk.CTkButton(
             self.button_frame,
-            text="⏹️ DURDUR",
+            text="⏹️ STOP",
             command=self.stop_analysis,
             font=ctk.CTkFont(size=16, weight="bold"),
             height=50,
@@ -203,7 +212,7 @@ class EmotionAnalysisGUI:
         # Ağırlık başlığı
         self.weight_title = ctk.CTkLabel(
             self.weight_frame,
-            text="⚖️ AĞIRLIK AYARLARI",
+            text="⚖️ WEIGHT SETTINGS",
             font=ctk.CTkFont(size=16, weight="bold"),
             text_color=("#d97706", "#fbbf24")
         )
@@ -211,9 +220,9 @@ class EmotionAnalysisGUI:
         
         # Ağırlık kontrolleri
         weight_configs = [
-            ("🖼️ Görüntü", self.w_image, self.color_themes["image"]["primary"]),
-            ("🎙️ Ses", self.w_voice, self.color_themes["voice"]["primary"]),
-            ("📝 Metin", self.w_text, self.color_themes["text"]["primary"])
+            ("🖼️ Image", self.w_image, self.color_themes["image"]["primary"]),
+            ("🎙️ Voice", self.w_voice, self.color_themes["voice"]["primary"]),
+            ("📝 Text", self.w_text, self.color_themes["text"]["primary"])
         ]
         
         for i, (label_text, var, color) in enumerate(weight_configs):
@@ -265,7 +274,7 @@ class EmotionAnalysisGUI:
                     values = [self.w_image.get(), self.w_voice.get(), self.w_text.get()]
                     label.configure(text=f"{values[i]:.1f}")
         except Exception as e:
-            print(f"Ağırlık label güncelleme hatası: {e}")
+            print(f"Weight label update error: {e}")
             
     def setup_results_panel(self):
         # Sağ frame - Sonuçlar
@@ -283,7 +292,7 @@ class EmotionAnalysisGUI:
         
         self.results_title = ctk.CTkLabel(
             self.results_header,
-            text="📊 DUYGU ANALİZİ SONUÇLARI",
+            text="📊 RESULTS OF EMOTION ANALYSIS",
             font=ctk.CTkFont(size=20, weight="bold"),
             text_color=("#5b21b6", "#ffffff")
         )
@@ -291,10 +300,10 @@ class EmotionAnalysisGUI:
         
         # Sonuç framelerini oluştur
         result_configs = [
-            ("image", "🖼️ Görüntü Analizi", 1, 0),
-            ("voice", "🎙️ Ses Analizi", 1, 1),
-            ("text", "📝 Metin Analizi", 2, 0),
-            ("combined", "🎯 Birleşik Sonuç", 2, 1, True)
+            ("image", "🖼️ Image Analysis", 1, 0),
+            ("voice", "🎙️ Voice Analysis", 1, 1),
+            ("text", "📝 Textual Analysis", 2, 0),
+            ("combined", "🎯 FINAL", 2, 1, True)
         ]
         
         for config in result_configs:
@@ -391,7 +400,7 @@ class EmotionAnalysisGUI:
         # Kamerayı başlat
         self.cap = cv2.VideoCapture(0)
         if not self.cap.isOpened():
-            self.show_error("Kamera açılamadı!")
+            self.show_error("Camera could not be opened!")
             return
             
         self.is_running = True
@@ -416,7 +425,7 @@ class EmotionAnalysisGUI:
         
         self.start_button.configure(state="normal")
         self.stop_button.configure(state="disabled")
-        self.camera_label.configure(image=None, text="🛑 Kamera Durduruldu")
+        self.camera_label.configure(image=None, text="🛑 Camera  has been stopped")
         
     def camera_loop(self):
         while self.is_running:
@@ -521,7 +530,7 @@ class EmotionAnalysisGUI:
         cv2.circle(frame, (w-30, 30), 12, (255, 255, 255), 2)
         
         # Başlık metni - Üst orta
-        title_text = "SMART CAMERA SYSTEM"
+        title_text = "AI CAMERA SYSTEM"
         text_size = cv2.getTextSize(title_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0]
         text_x = (w - text_size[0]) // 2
         
@@ -578,16 +587,16 @@ class EmotionAnalysisGUI:
     def analyze_image(self, face_image):
         try:
             # Geçici dosya için tam yol belirle
-            temp_dir = "/tmp" if os.path.exists("/tmp") else os.getcwd()
+            temp_dir = "/tmp_files" if os.path.exists("/tmp_files") else os.getcwd()
             temp_path = os.path.join(temp_dir, f"temp_face_{threading.current_thread().ident}.jpg")
             
             # Geçici dosyaya kaydet
             success = cv2.imwrite(temp_path, face_image)
             if not success:
-                print(f"Geçici dosya yazılamadı: {temp_path}")
+                print(f"Failed to write temporary file: {temp_path}")
                 return
             
-            print(f"Geçici dosya oluşturuldu: {temp_path}")
+            # print(f"Geçici dosya oluşturuldu: {temp_path}")
             
             # Gerçek analyze_emotion fonksiyonunu çağır
             result = self.analyze_emotion(temp_path)
@@ -603,8 +612,8 @@ class EmotionAnalysisGUI:
                 with self.results_lock:
                     self.image_results = result_normalized
                 
-                print(f"Görüntü analizi sonucu: {result_normalized}")
-                print(f"Görüntü sonuç toplamı: {np.sum(result_normalized)}")
+                # print(f"Görüntü analizi sonucu: {result_normalized}")
+                # print(f"Görüntü sonuç toplamı: {np.sum(result_normalized)}")
                 
                 # GUI'yi güncelle - Thread-safe şekilde
                 self.root.after(0, self.update_results_display)
@@ -612,10 +621,10 @@ class EmotionAnalysisGUI:
             # Geçici dosyayı sil
             if os.path.exists(temp_path):
                 os.remove(temp_path)
-                print(f"Geçici dosya silindi: {temp_path}")
+                # print(f"Geçici dosya silindi: {temp_path}")
                 
         except Exception as e:
-            print(f"Görüntü analizi hatası: {e}")
+            print(f"Image analysis error: {e}")
             import traceback
             traceback.print_exc()
     
@@ -651,19 +660,21 @@ class EmotionAnalysisGUI:
                         else:
                             self.text_results = np.zeros(6)
             
-            print(f"Ses analizi sonucu: {self.voice_results}")
-            print(f"Metin analizi sonucu: {self.text_results}")
+            # print(f"Ses analizi sonucu: {self.voice_results}")
+            # print(f"Metin analizi sonucu: {self.text_results}")
             
             # GUI'yi güncelle - Thread-safe şekilde
             self.root.after(0, self.update_results_display)
             
         except Exception as e:
-            print(f"Ses/metin analizi hatası: {e}")
+            print(f"Voice/text analysis error: {e}")
             import traceback
             traceback.print_exc()
     
     # Orijinal fonksiyonlarınızı buraya ekleyin
-    def analyze_emotion(self, image_path, model_path="/home/fhurkhan/Masaüstü/Emotion_Detection/models/image/IMAGE_MODEL_V1.keras"):
+    def analyze_emotion(self, image_path, model_path=None):
+        if model_path is None:
+            model_path = self.keras_model
         try:
             # Modeli yükle (sadece ilk seferde)
             if not hasattr(self, 'image_model'):
@@ -672,7 +683,7 @@ class EmotionAnalysisGUI:
             # Görüntüyü numpy array olarak oku
             image_array = cv2.imread(image_path)
             if image_array is None:
-                print(f"Görüntü okunamadı: {image_path}")
+                print(f"Image could not be read: {image_path}")
                 return None
             
             # Çalışan kodunuzdaki gibi preprocessing
@@ -690,14 +701,14 @@ class EmotionAnalysisGUI:
             return string_predictions
         
         except Exception as e:
-            print(f"Görüntü analizi hatası: {e}")
+            print(f"Image analysis error: {e}")
             return None
     
     def voice_models_predictor(self):
         try:
             # ModelPredictor sınıfını başlat
-            model_path = "/home/fhurkhan/Masaüstü/Emotion_Detection/models/voice/"
-            json_path = "/home/fhurkhan/Masaüstü/Emotion_Detection/config_files/"
+            model_path = "./models/voice/"
+            json_path = "./config_files/"
             predictor = ModelPredictor(model_path, json_path)
 
             # AudioRecorder sınıfını kullanarak ses kaydı ve özellik çıkarımı
@@ -706,7 +717,7 @@ class EmotionAnalysisGUI:
 
             # Eğer özellik çıkarılamadıysa sıfır dön
             if features is None or len(features) == 0:
-                print("Ses özellikleri çıkarılamadı.")
+                print("Audio features could not be extracted.")
                 return np.zeros(6)
 
             # Tahmin için reshape
@@ -717,18 +728,18 @@ class EmotionAnalysisGUI:
             return result
 
         except Exception as e:
-            print(f"Ses tabanlı duygu tahmininde hata: {e}")
+            print(f"Error in audio-based emotion prediction: {e}")
             return np.zeros(6)
 
     def text_emotion(self):
         try:
-            recognizer = EmotionRecognizer(eng_rate=0.8, tr_rate=0.9)
+            recognizer = EmotionRecognizer()
             # For a single recording and analysis
             result = recognizer.single_analysis(wav_file_path="./temp_files/recorded_audio.wav") # ['anger','fear','happy','natural','sad','surprised'] yüzdesel sonuçlar
             result = np.array(result, dtype=float)
             return result
         except Exception as e:
-            print(f"Metin analizi hatası: {e}")
+            print(f"Text analysis error: {e}")
             return np.zeros(6)
     
     def update_results_display(self):
@@ -765,13 +776,13 @@ class EmotionAnalysisGUI:
             with self.results_lock:
                 self.combined_results = combined_normalized
             
-            print(f"Birleşik sonuç (w_text:{w_text:.1f}, w_image:{w_image:.1f}, w_voice:{w_voice:.1f}): {combined_normalized}")
+            # print(f"Birleşik sonuç (w_text:{w_text:.1f}, w_image:{w_image:.1f}, w_voice:{w_voice:.1f}): {combined_normalized}")
             
             # GUI'yi güncelle
             self._update_ui_results(image_results_copy, voice_results_copy, text_results_copy, combined_normalized)
             
         except Exception as e:
-            print(f"GUI güncelleme hatası: {e}")
+            print(f"GUI update error: {e}")
             import traceback
             traceback.print_exc()
     
@@ -792,7 +803,7 @@ class EmotionAnalysisGUI:
                     progress_bars = self.progress_bars[key]
                     value_labels = self.value_labels[key]
                     
-                    print(f"GUI güncelleme - {key}: {results}")
+                    # print(f"GUI güncelleme - {key}: {results}")
                     
                     for i, (bar, label) in enumerate(zip(progress_bars, value_labels)):
                         if i < len(results):
@@ -825,17 +836,17 @@ class EmotionAnalysisGUI:
                                 label.configure(text=f"{value:.0f}%", text_color=color)
                                 
                             except Exception as e:
-                                print(f"GUI elemanı güncelleme hatası {key}-{i}: {e}")
+                                print(f"GUI element update error {key}-{i}: {e}")
                         else:
                             # Veri yoksa sıfırla
                             bar.set(0)
                             label.configure(text="0%", text_color="#6b7280")
                 else:
-                    print(f"Progress bar bulunamadı: {key}")
-                    print(f"Mevcut keys: {list(self.progress_bars.keys())}")
+                    print(f"Progress bar not found: {key}")
+                    print(f"Current keys: {list(self.progress_bars.keys())}")
                     
         except Exception as e:
-            print(f"_update_ui_results hatası: {e}")
+            print(f"_update_ui_results error: {e}")
             import traceback
             traceback.print_exc()
     
@@ -852,7 +863,7 @@ class EmotionAnalysisGUI:
     def show_error(self, message):
         # Modern hata dialog'u
         error_window = ctk.CTkToplevel(self.root)
-        error_window.title("⚠️ Hata")
+        error_window.title("⚠️ Error!")
         error_window.geometry("400x200")
         error_window.resizable(False, False)
         error_window.configure(fg_color=("#ffffff", "#1a1a1a"))
@@ -879,7 +890,7 @@ class EmotionAnalysisGUI:
         # Tamam butonu
         ok_button = ctk.CTkButton(
             error_frame, 
-            text="✅ Tamam", 
+            text="✅ OK", 
             command=error_window.destroy,
             font=ctk.CTkFont(size=12, weight="bold"),
             fg_color=("#dc2626", "#ef4444"),
