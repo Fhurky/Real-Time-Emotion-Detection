@@ -1,3 +1,7 @@
 {
-    "weights": [0.854, 0.800, 0.893, 0.746, 0.661, 0.843, 0.630, 0.820]
+    "weights": [0.854, 0.800, 0.893, 0.746, 0.661, 0.843, 0.630, 0.820],
+    "BERT_tr": "C:\\Users\\Furkan\\Desktop\\Emotion_detection_windows\\models\\text\\turkish_emotion_analysis.pt",
+    "keras": "C:\\Users\\Furkan\\Desktop\\Emotion_detection_windows\\models\\image\\IMAGE_MODEL_V1.keras",
+    "eng_rate": 0.8,
+    "tr_rate": 0.9
 }
