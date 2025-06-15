@@ -2,29 +2,36 @@ import speech_recognition as sr
 import numpy as np
 from needed_classes.trBert import EmotionPredictor
 from needed_classes.engBert import EmotionPredictorEN
+import json, os
 
 class EmotionRecognizer:
     def __init__(self, 
                  wav_file_path=None,
-                 lang="tr-TR", 
-                 eng_rate=0.8,
-                 tr_rate=0.9):
+                 lang="tr-TR"):
+        
+        self.lang = lang
+
         # Initialize recognizer
         self.recognizer = sr.Recognizer()
         
+        # Konfigürasyon dosyasını yükle
+        config_path = os.path.join("config_files", "config.json")
+        with open(config_path, "r", encoding="utf-8") as file:
+            config = json.load(file)
+
+        # BERT model yolunu al
+        bert_model_path = config.get("BERT_tr")
+
+        # Dil oranlarını al
+        self.eng_rate = config.get("eng_rate", 0.8)  # Eğer config'te yoksa varsayılan 0.8
+        self.tr_rate = config.get("tr_rate", 0.9)    # Eğer config'te yoksa varsayılan 0.9
+
         # Initialize emotion predictors
-        self.predictorTR = EmotionPredictor(model_path="/home/fhurkhan/Masaüstü/Emotion_Detection/models/text/turkish_emotion_analysis.pt")
+        self.predictorTR = EmotionPredictor(model_path=bert_model_path)
         self.predictorENG = EmotionPredictorEN()
         
         # Audio file path
-        self.wav_file_path = wav_file_path
-        
-        # Language parameter
-        self.lang = lang  # Default language
-        
-        # Store the rate parameters as instance variables
-        self.eng_rate = eng_rate
-        self.tr_rate = tr_rate
+        self.wav_file_path = wav_file_path     
     
     def transcribe_audio(self, audio_file=None):
         """Transcribe audio file to text using Google Speech Recognition"""
