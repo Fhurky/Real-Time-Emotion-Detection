@@ -1,7 +1,6 @@
 # 🎭 Emotion Detection GUI
 
 Bu proje, **metin**, **görüntü** ve **ses** girdilerinden Türkçe duygu analizi yapan çok modelli bir masaüstü uygulamasıdır. Arayüzü sayesinde kullanıcılar kolayca veri girişi yapabilir ve duygu tahminlerini anlık olarak gözlemleyebilir.
-
 ---
 
 ## 📂 Klasör Yapısı
@@ -51,6 +50,8 @@ Bu proje, **metin**, **görüntü** ve **ses** girdilerinden Türkçe duygu anal
 
 ## ⚙️ Kurulum
 
+
+
 1. Python 3.11 ortamı oluştur ve etkinleştir:
    ```bash
    conda create --name emotion_detection_gui python=3.11
@@ -98,6 +99,9 @@ Bu proje, **metin**, **görüntü** ve **ses** girdilerinden Türkçe duygu anal
 - Model yolları ve konfigürasyonlar `config_files/config.json` dosyasından yönetilmektedir.
 - `./needed_classes` dizininde ses kaydı, metin analizörü ve model yükleyici gibi bileşenler modüler halde bulunur.
 - `./temp_files` klasörü çalışma sırasında oluşan geçici dosyaları barındırır.
+- Bu proje linux ortamında ve CUDA desteğiyle geliştirilmiş sonrasında windows için adapte edilmiştir.
+- Proje çalıştırılmadan önce işletim sistemine göre config.json dosyasındaki path değişkenleri doğru bir şekilde ayarlanmalıdır.
+- CUDA kullanımı için CuDNN ve gerekli CUDA kütüphaneleri yüklenmelidir. Versiyon kontrolleri requirements_linux.txt üzerinden yapılabilir. (trBert.py ve enBert.py dosyaları üzerinden device = "cuda" olarak değiştirilmelidir)
 
 ---
 
